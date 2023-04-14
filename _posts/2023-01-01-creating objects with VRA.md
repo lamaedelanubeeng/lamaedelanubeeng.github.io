@@ -28,7 +28,7 @@ Next...
 | Easy to implement| Requires an execution enviroment |
 |Allows for complex integrations | There are no day 2 actions| 
 
-In <a href= 'https://github.com/lamaedelanube/lamaedelanube.github.io/blob/main/_posts/2022-03-16-AKS%20con%20CodeStream-1.md'>this</a>  post we will discuss further some of the ways to get it accomplished.
+In <a href= 'https://lamaedelanube.github.io/2022/03/16/AKS-con-CodeStream-1.html'>this</a>  post we will discuss further some of the ways to get it accomplished.
 
 <br/><br/>
 
@@ -41,7 +41,7 @@ In <a href= 'https://github.com/lamaedelanube/lamaedelanube.github.io/blob/main/
 |Allows some day 2 actions  | Requires a GIT Repo |
 || Terraform provider must exist |
 
- <a href= https://lamaedelanube.github.io/2022/04/10/Terraform-VRA-Parte1.html>Here</a> we will be talking about this use case
+ <a href= 'https://lamaedelanube.github.io/2022/04/10/Terraform-VRA-Parte1.html'>Here</a> we will be talking about this use case
 
 <br/><br/>
 
