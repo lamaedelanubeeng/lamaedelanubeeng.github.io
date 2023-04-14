@@ -1,6 +1,6 @@
 <H1> How to create objects with vRealize Automation? </H1>
 
-<h2> one objective, multiple paths </h2>
+<h2> One objective, multiple paths </h2>
 In this series we will develop an use case and the multiple ways we have to get it fulfilled using vRealize Automation and their different integrations. 
 
 
@@ -24,7 +24,7 @@ Next...
 
 |  Pros.    |  Cons     |
 |-----------|------------------|
-| Easy to implement| Requires an execution  |
+| Easy to implement| Requires an execution enviroment |
 |Allows for complex integrations | There are no day 2 actions| 
 
 In <a href= https://github.com/lamaedelanube/lamaedelanube.github.io/blob/main/_posts/2022-03-16-AKS%20con%20CodeStream-1.md>this</a>  post we will discuss further some of the ways to get it accomplished.
@@ -35,7 +35,7 @@ In <a href= https://github.com/lamaedelanube/lamaedelanube.github.io/blob/main/_
 
 |  Pros |  Cons     |
 |-----------|------------------|
-| Easy to implement| * Podria requerir un motor de ejeucion |
+| Easy to implement| * Might require an execution enviroment |
 |Allows for complex integrations|  You must learn Terraform| 
 |Allows some day 2 actions  | Requires a GIT Repo |
 || Terraform provider must exist |
