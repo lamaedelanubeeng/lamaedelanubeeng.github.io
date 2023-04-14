@@ -5,7 +5,7 @@ I like the NSX-T CLI quite a lot. I think it's very intuitive and covers any (or
 
 Let's say that we are facing a scenario in which we have to execute one or more actions at the same time on different NSX-T objects. We are going to leverage the NSX-T CLI. However, Who wants to log manually into all the managers and edges? No one has time for that.
 
-Well, luckily there is a way to execute different commands from one of the managers servers, and get them run in all our infrastructure. It is the NSX-T Central CLI, Which I rather call the ON command:
+Luckily there is a way to execute different commands from one of the managers servers, and get them run in all our infrastructure. It is the NSX-T Central CLI, Which I rather call the ON command:
 
 
 <img width="741" alt="image" src="https://user-images.githubusercontent.com/51407995/163097614-590de761-8bad-4a44-ac58-4eea4c94e4bf.png">
@@ -27,7 +27,7 @@ I have to configure VRLI as the receiver of the logs for all managers and edges 
 
 
 
-So, for my case it would be something like this:
+So, in my case it would be something like this:
 
 <img width="741" alt="image" src="https://user-images.githubusercontent.com/51407995/163097839-f9890524-72b3-4a9a-9e63-06526147ee71.png">
 
