@@ -3,9 +3,9 @@
 I like the NSX-T CLI quite a lot. I think it's very intuitive and covers any (or almost any) use case I've been presented with. The documentation seems really good, we can find it <a href="https://vdc-download.vmware.com/vmwb-repository/dcr-public/cc42e3c1-eb34-4567-a916-147e79798957/8264605c-a5e1-49a8-b603-cc78621eeeab/cli.html.">here</a> 
 
 
-Suppose we are facing a scenario where we have to execute one or more actions at the same time on different NSX-T objects. We're going to use the NSX-T CLI. But, Who wants to log manually into all the managers and edges?
+Let's say that we are facing a scenario in which we have to execute one or more actions at the same time on different NSX-T objects. We are going to leverage the NSX-T CLI. However, Who wants to log manually into all the managers and edges? No one has time for that.
 
-Well, luckily there is a way to execute different commands from one of the managers servers, and get them run in all our infrastructure. It is the NSX-T Central CLI, better known as the ON command:
+Well, luckily there is a way to execute different commands from one of the managers servers, and get them run in all our infrastructure. It is the NSX-T Central CLI, Which I rather call the ON command:
 
 
 <img width="741" alt="image" src="https://user-images.githubusercontent.com/51407995/163097614-590de761-8bad-4a44-ac58-4eea4c94e4bf.png">
