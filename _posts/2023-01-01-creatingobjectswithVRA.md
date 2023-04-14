@@ -44,7 +44,7 @@ In <a href= https://github.com/lamaedelanube/lamaedelanube.github.io/blob/main/_
 
 <br/><br/>
 
-4. Create custom resources
+<b>Option #4 </b> Create custom resources
 
 
 |  Pros |  Cons     |
