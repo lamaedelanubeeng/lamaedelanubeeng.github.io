@@ -9,6 +9,7 @@ We need to create an AKS Cluster, in a new resource group and a new subnet creat
 
 
 <br/><br/>
+<h3>The options</h3>
 
 <b>Option #1:</b> Cloud assembly native resources.
 
