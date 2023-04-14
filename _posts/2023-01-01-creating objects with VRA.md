@@ -28,7 +28,7 @@ Next...
 | Easy to implement| Requires an execution enviroment |
 |Allows for complex integrations | There are no day 2 actions| 
 
-In <a href= https://github.com/lamaedelanube/lamaedelanube.github.io/blob/main/_posts/2022-03-16-AKS%20con%20CodeStream-1.md>this</a>  post we will discuss further some of the ways to get it accomplished.
+In <a href= 'https://github.com/lamaedelanube/lamaedelanube.github.io/blob/main/_posts/2022-03-16-AKS%20con%20CodeStream-1.md'>this</a>  post we will discuss further some of the ways to get it accomplished.
 
 <br/><br/>
 
