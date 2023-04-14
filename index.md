@@ -1,5 +1,6 @@
-Here you can say lots of fun things about your site.
+Thanks for stepping by!
 
-Maybe say a some things about yourself.
+Hopefully you came to this blog after 'googling' an issue you are facing, and you were able to find a solution. 
 
-Or maybe what you plan to blog about.
+And that is the idea, to share a bit of what I learn working with cloud technologies, mostly VMware's. 
+
