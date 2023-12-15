@@ -1,6 +1,6 @@
-</h1> Study with me series: Kubernetes</h1>
+<h1> Study with me series: Kubernetes</h1>
 
-<b>Architecture:</b>
+<h2>Architecture:</h2>
 
   <b>Control plane:</b>
     Is a collection of multiple components responsible for managing the cluster itself. They run on controller machines.
