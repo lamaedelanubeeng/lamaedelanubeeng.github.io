@@ -13,3 +13,10 @@ Definitions:
 
       
     
+Namespaces:
+  default: What the same means
+  kube-system: 
+
+  kube-ctl get pods --all-namespaces: find a pod in all namespaces
+
+  kubectl create namespaces: creates a namespaces
