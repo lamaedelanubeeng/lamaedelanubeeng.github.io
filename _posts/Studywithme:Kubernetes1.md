@@ -187,3 +187,7 @@ Nodes will remain in NotReady status if there is not network plugin
 Runs as a service in a pod, normally in the kube-system namespace
 CoreDNS for example
 
+
+<b>Exporting object yaml</b>
+kubectl get pod <name> -o yaml > <file>
+
