@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    cni.projectcalico.org/containerID: 31c212267502522e16975e5db7ddfd65736801eae24c44afb366414cfe7de3ba
+    cni.projectcalico.org/podIP: 192.168.228.1/32
+    cni.projectcalico.org/podIPs: 192.168.228.1/32
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{},"name":"beebox-shipping-data","namespace":"default"},"spec":{"containers":[{"image":"linuxacademycontent/random-crashing-web-server:1","name":"shipping-data"}],"restartPolicy":"Never"}}
+  creationTimestamp: "2023-12-16T02:39:34Z"
+  name: beebox-shipping-data
+  namespace: default
+  resourceVersion: "877"
+  uid: 583a19e9-b3f5-4857-9d48-2e56b7633ad1
+spec:
+  containers:
+  - image: linuxacademycontent/random-crashing-web-server:1
+    imagePullPolicy: IfNotPresent
+    name: shipping-data
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-wd6ml
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: acgk8s-worker1
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Never
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
