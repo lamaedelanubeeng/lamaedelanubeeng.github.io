@@ -1,0 +1,170 @@
+name: Red Hat 7 - No Produccion
+version: 1.2
+formatVersion: 1
+inputs:
+  username:
+    type: string
+    title: Usuario
+    description: Username
+    default: testuser
+  password:
+    type: string
+    title: Password
+    default: VMware123!
+    encrypted: true
+    description: Password para el usuario
+  nube:
+    type: string
+    title: Nube
+    oneOf:
+      - title: On Premise
+        const: 'nube:Z1'
+      - title: AWS
+        const: 'nube:Z2'
+    default: 'nube:Z1'
+  rol:
+    type: string
+    title: Rol
+    oneOf:
+      - title: APP
+        const: 'rol:APP'
+      - title: WEB
+        const: 'rol:WEB'
+      - title: DB
+        const: 'rol:DB'
+    default: 'rol:APP'
+  aplic:
+    type: string
+    description: Tipo de Servidor
+    title: Aplicacion
+    maxLength: 5
+    pattern: '[a-zA-Z]+'
+  ##nodes:
+  ##  type: integer
+  ##  description: Cantidad de Equipos
+  ##  default: 1
+  ##  title: Cantidad de equipos
+  ##  minimum: 1
+  ##  maximum: 5
+  ##  pattern: '[0-9]+'
+  imagen:
+    type: string
+    enum:
+      - Linux-RHEL7-CI
+    default: Linux-RHEL7-CI
+    title: Sistema Operativo
+  flavor:
+    type: string
+    default: Small
+    title: Tamaño
+    oneOf:
+      - title: Extra Small (1 vCPU-1 GB)
+        const: Extra Small
+      - title: Small (1 vCPU-2 GB)
+        const: Small
+      - title: Medium (2 vCPU-2 GB)
+        const: Medium
+      - title: Large (2 vCPU-4 GB)
+        const: Large
+      - title: Extra Large (2 vCPU-8 GB)
+        const: Extra Large
+  environment:
+    type: string
+    default: 'env:D'
+    title: Entorno
+    oneOf:
+      - title: Desarrollo
+        const: 'env:D'
+      - title: Produccion
+        const: 'env:P'
+      - title: Testing
+        const: 'env:T'
+  antivirus:
+    type: string
+    default: vra_test
+    title: Aplicativos
+    oneOf:
+      - title: Antivirus 1
+        const: vra_test
+      - title: Antivirus 2
+        const: Install AV2
+  backup:
+    type: string
+    enum:
+      - Diario
+      - Semanal
+      - Quincenal
+      - Mensual
+      - Sin Backup
+    default: Sin Backup
+    title: Politica de Backup
+  pagename:
+    type: string
+    default: TELECOM-WEBPAGE
+    description: Nombre de pagina web
+    title: Nombre Pagina
+resources:
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    properties:
+      name: '${substring(input.environment,4) + "L" + to_upper(input.aplic) + substring(input.rol,4)}'
+      image: '${input.imagen}'
+      flavor: '${input.flavor}'
+      snapshotLimit: 1
+      ## count: '${input.nodes}'
+      constraints:
+        - tag: '${input.environment}'
+        - tag: null
+      networks:
+        - network: '${resource.Cloud_vSphere_Network_1.id}'
+          assignment: static
+      storage:
+        constraints:
+          - tag: '${input.environment}'
+          - tag: '${input.nube}'
+      tags:
+        - key: Backup
+          value: '${to_lower(input.backup)}'
+        - key: Entorno
+          value: '${substring(input.environment , 4)}'
+        - key: Proyecto
+          value: '${to_lower(env.projectName)}'
+      cloudConfig: |
+        #cloud_config
+        ssh_pwauth: True
+        chpasswd:
+          list: |
+              ${input.username}:${input.password}
+          expire: False
+        users:
+          - default
+          - name: ${input.username}
+            passwd: ${input.password}
+            sudo: ['ALL=(ALL) NOPASSWD:ALL']
+            groups: adm,root,sudo
+            shell: '/bin/bash'
+        preserve_hostname: false
+        hostname: ${self.resourceName}
+        fqdn: ${self.resourceName}.telecom.arg.telecom.com.ar
+        network:
+          version: 1
+          config:
+            - type: physical
+              name: ens192
+              subnets:
+                - type: static
+                  address: ${resource.Cloud_Machine_1.networks.address[0]}/${resource.Cloud_vSphere_Network_1.prefixlength}
+                  gateway: ${resource.Cloud_vSphere_Network_1.gateway}
+        runcmd:
+          - cd /root/packages/httpd
+          - yum -y localinstall *.rpm
+          - sed -i "s/Testing 123../${input.pagename}/g" /usr/share/httpd/noindex/index.html
+          - systemctl enable httpd
+          - systemctl start httpd
+  Cloud_vSphere_Network_1:
+    type: Cloud.vSphere.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: '${input.environment}'
+        - tag: '${input.nube}'
