@@ -1,0 +1,152 @@
+name: Win-Ansible
+version: 1.2
+formatVersion: 1
+inputs:
+  nube:
+    type: string
+    title: Nube
+    oneOf:
+      - title: On Premise
+        const: 'nube:Z1'
+      - title: AWS
+        const: 'nube:Z2'
+    default: 'nube:Z1'
+  rol:
+    type: string
+    title: Rol
+    oneOf:
+      - title: APP
+        const: 'rol:APP'
+      - title: WEB
+        const: 'rol:WEB'
+      - title: DB
+        const: 'rol:DB'
+    default: 'rol:APP'
+  aplic:
+    type: string
+    description: Tipo de Servidor
+    title: Aplicacion
+    maxLength: 5
+    pattern: '[a-zA-Z]+'
+  ##nodes:
+  ##  type: integer
+  ##  description: Cantidad de Equipos
+  ##  default: 1
+  ##  title: Cantidad de equipos
+  ##  minimum: 1
+  ##  maximum: 5
+  ##  pattern: '[0-9]+'
+  imagen:
+    type: string
+    enum:
+      - Windows 2019
+    default: Windows 2019
+    title: Sistema Operativo
+  flavor:
+    type: string
+    default: Small
+    title: Tamaño
+    oneOf:
+      - title: Extra Small (1 vCPU-1 GB)
+        const: Extra Small
+      - title: Small (1 vCPU-2 GB)
+        const: Small
+      - title: Medium (2 vCPU-2 GB)
+        const: Medium
+      - title: Large (2 vCPU-4 GB)
+        const: Large
+      - title: Extra Large (2 vCPU-8 GB)
+        const: Extra Large
+  environment:
+    type: string
+    default: 'env:D'
+    title: Entorno
+    oneOf:
+      - title: Desarrollo
+        const: 'env:D'
+      - title: Produccion
+        const: 'env:P'
+      - title: Testing
+        const: 'env:T'
+  antivirus:
+    type: string
+    default: VRA_deploy
+    title: Aplicativos
+    oneOf:
+      - title: Inicializar Volumen
+        const: VRA_deploy
+      - title: Antivirus 2
+        const: Install AV2
+  backup:
+    type: string
+    enum:
+      - Diario
+      - Semanal
+      - Quincenal
+      - Mensual
+      - Sin Backup
+    default: Sin Backup
+    title: Politica de Backup
+resources:
+  Cloud_Ansible_Tower_1:
+    type: Cloud.Ansible.Tower
+    dependsOn:
+      - Cloud_Machine_1
+    properties:
+      host: '${resource.Cloud_Machine_1.*}'
+      account: AnsibleTower
+      hostVariables: |
+        ip: '${resource.Cloud_Machine_1.address}'
+        vm:
+          os: windows
+          name: '${resource.Cloud_Machine_1.name}'
+          disks: 
+            '2':
+              mountpoint: F
+      jobTemplates:
+        provision:
+          - '${input.antivirus}'
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    properties:
+      name: '${substring(input.environment,4) + "L" + to_upper(input.aplic) + substring(input.rol,4)}'
+      image: '${input.imagen}'
+      flavor: '${input.flavor}'
+      customizationSpec: VMware_Demo_Win
+      snapshotLimit: 1
+      ## count: '${input.nodes}'
+      constraints:
+        - tag: '${input.environment}'
+        - tag: null
+      networks:
+        - network: '${resource.Cloud_Network.id}'
+          assignment: static
+          tags:
+            - key: Entorno
+              value: '${substring(input.environment , 4)}'
+            - key: Proyecto
+              value: '${env.projectName}'
+      storage:
+        constraints:
+          - tag: '${input.environment}'
+          - tag: '${input.nube}'
+      tags:
+        - key: Backup
+          value: '${to_lower(input.backup)}'
+        - key: Entorno
+          value: '${substring(input.environment , 4)}'
+        - key: Proyecto
+          value: '${to_lower(env.projectName)}'
+      attachedDisks:
+        - source: '${resource.Cloud_vSphere_Disk_1.id}'
+  Cloud_Network:
+    type: Cloud.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: '${input.environment}'
+        - tag: '${input.nube}'
+  Cloud_vSphere_Disk_1:
+    type: Cloud.vSphere.Disk
+    properties:
+      capacityGb: 1
