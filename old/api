@@ -1,0 +1,72 @@
+import requests
+import json
+
+def handler(context, inputs):
+    vrli_url = f'https://data.mgmt.cloud.vmware.com/le-mans/v1/streams/ingestion-pipeline-stream'
+    print(f'Cloud proxy url : {vrli_url}')
+    
+    headers = {"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer L3cHnvgnmj9oRjdLNHWqd6L4Xckjv3Dk","structure":"default"}
+    vrac_evt = inputs['eventTopicId']
+    dep_owner = inputs['tags']['owner']
+    payload = {
+        "source": "vRAC-Deployment",
+        "appname": "vRAC",
+        #"event_type": vrac_evt,
+        "log_message": inputs,
+        "owner": dep_owner
+    }
+    #req = requests.post(cloud_proxy_url, json=payload, headers = headers)
+    resp = requests.post(vrli_url, headers=headers, data=json.dumps(payload), verify=False)
+    print(f'vRLI REST response : {resp}')
+    if resp.status_code != 200:
+        print(f'Unsuccessful Logging Attmept. Error code {resp.status_code}')
+    else:
+        print('Successfully added log to vRLI Cloud {resp.json()}') 
+
+
+
+import requests
+import urllib.parse
+
+def handler(context, inputs):
+    baseurl = "https://api.mgmt.cloud.vmware.com"
+    refToken = inputs['refresh_token']
+    project_id = inputs['project_id']
+    headers = {"Accept":"application/json","Content-Type":"application/json"}
+    access_token = getToken(baseurl,refToken,headers)
+    #print(f'CAS access token: {access_token}')
+    project_vms = getCASProjectVMs(baseurl,access_token,project_id)
+    for vm in project_vms:
+        print(f'VM name: {vm["name"]}')
+
+def getToken(baseurl,refToken,headers):
+    payload = {"refreshToken":refToken}
+    uri = "/iaas/login"
+    req = requests.post(f'{baseurl}{uri}', json=payload, headers = headers)
+    bearer = ""
+    if req.status_code != 200:
+        print(f'Unsuccessful Login Attmept. Error code {req.status_code}')
+    else:
+        print('Successfully login to CAS!!') 
+        ###bearer = "Bearer "
+        bearer = "Bearer " + req.json()["token"]
+        #print(f'bearer token {bearer}')
+    return bearer    
+
+def getCASProjectVMs(baseurl,access_token,project_id):
+    headers = {"Authorization":access_token}
+    #uri = f'/iaas/api/machines?projectId={project_id}'
+    project_filter = urllib.parse.quote(f"projectId eq '{project_id}'")
+    #uri = f"/iaas/api/machines{project_filter}"
+    uri = f"/iaas/api/machines?$filter={project_filter}"
+    print(f'Get Project VMs uri {uri}')
+    #print(f'Get Project {project_id} VMs')
+    req = requests.get(f'{baseurl}{uri}',headers = headers)
+    VMs = []
+    if req.status_code != 200:
+        print(f'Failed to get CAS VMs for Project {project_id}')
+    else:
+        VMs = req.json()["content"]
+        VM_size = len(VMs)
+        print(f'Get Project VMs for Project: {project_id} is successful. No of VMs {VM_size}')        
+    return VMs
